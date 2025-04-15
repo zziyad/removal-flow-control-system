@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,14 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom colors for removal system
+				removal: {
+					pending: '#FFA500',   // Orange
+					approved: '#4CAF50', // Green
+					rejected: '#F44336', // Red
+					return: '#2196F3',   // Blue
+                    draft: '#9E9E9E'     // Gray
 				}
 			},
 			borderRadius: {
