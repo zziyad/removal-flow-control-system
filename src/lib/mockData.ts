@@ -1,4 +1,3 @@
-
 import { 
   User, Role, Permission, Department, UserDepartment, 
   WorkflowStep, WorkflowTransition, Removal, RemovalReason,
@@ -301,7 +300,7 @@ export const sampleRemovals: Removal[] = [
       {
         id: "img3",
         removalId: "r3",
-        url: "https://images.unsplash.com/photo-1589830606050-a8e819c629a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        url: "https://images.unsplash.com/photo-1589830606058-bf4114d55352?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
         filename: "projector.jpg",
         createdAt: new Date(2025, 1, 5)
       }

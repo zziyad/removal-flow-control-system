@@ -1,4 +1,3 @@
-
 import {
   User,
   Removal,
@@ -409,12 +408,12 @@ export const approveRemoval = async (
   const removal = storage.removals[removalIndex];
   
   // Check the required permission based on the level
-  const requiredPermission = 
-    level === 2 ? "approve_level_2" :
-    level === 3 ? "approve_level_3" :
-    level === 4 ? "approve_level_4" :
-    level === 5 ? "approve_security" :
-    "";
+  let requiredPermission: PermissionName = "admin_access"; // Default fallback
+  
+  if (level === 2) requiredPermission = "approve_level_2";
+  else if (level === 3) requiredPermission = "approve_level_3";
+  else if (level === 4) requiredPermission = "approve_level_4";
+  else if (level === 5) requiredPermission = "approve_security";
   
   // Check if the user can approve at this level
   if (
@@ -425,12 +424,12 @@ export const approveRemoval = async (
   }
   
   // Check if removal is at the right status for this approval level
-  const expectedStatus = 
-    level === 2 ? "PENDING_LEVEL_2" :
-    level === 3 ? "PENDING_LEVEL_3" :
-    level === 4 ? "PENDING_LEVEL_4" :
-    level === 5 ? "PENDING_SECURITY" :
-    "";
+  let expectedStatus: RemovalStatus = "DRAFT"; // Default fallback
+  
+  if (level === 2) expectedStatus = "PENDING_LEVEL_2";
+  else if (level === 3) expectedStatus = "PENDING_LEVEL_3";
+  else if (level === 4) expectedStatus = "PENDING_LEVEL_4"; 
+  else if (level === 5) expectedStatus = "PENDING_SECURITY";
   
   if (removal.status !== expectedStatus && !hasPermission(user, "override_workflow")) {
     return Promise.reject(new Error(`Removal is not at the expected status for level ${level} approval`));
@@ -447,12 +446,12 @@ export const approveRemoval = async (
   }
   
   // Get next status
-  const nextStatus = 
-    level === 2 ? "PENDING_LEVEL_3" :
-    level === 3 ? "PENDING_LEVEL_4" :
-    level === 4 ? "PENDING_SECURITY" :
-    level === 5 ? "APPROVED" :
-    removal.status;
+  let nextStatus: RemovalStatus = removal.status;
+  
+  if (level === 2) nextStatus = "PENDING_LEVEL_3";
+  else if (level === 3) nextStatus = "PENDING_LEVEL_4";
+  else if (level === 4) nextStatus = "PENDING_SECURITY";
+  else if (level === 5) nextStatus = "APPROVED";
   
   // Create approval record
   const approval = {
@@ -472,7 +471,7 @@ export const approveRemoval = async (
   
   const updated = {
     ...removal,
-    status: nextStatus as RemovalStatus,
+    status: nextStatus,
     updatedAt: new Date(),
     approvals: [...removal.approvals, approval]
   };
@@ -500,12 +499,12 @@ export const rejectRemoval = async (
   const removal = storage.removals[removalIndex];
   
   // Check the required permission based on the level
-  const requiredPermission = 
-    level === 2 ? "approve_level_2" :
-    level === 3 ? "approve_level_3" :
-    level === 4 ? "approve_level_4" :
-    level === 5 ? "approve_security" :
-    "";
+  let requiredPermission: PermissionName = "admin_access"; // Default fallback
+  
+  if (level === 2) requiredPermission = "approve_level_2";
+  else if (level === 3) requiredPermission = "approve_level_3";
+  else if (level === 4) requiredPermission = "approve_level_4";
+  else if (level === 5) requiredPermission = "approve_security";
   
   // Check if the user can reject at this level
   if (
@@ -694,7 +693,7 @@ export const approveExtension = async (
   const extension = removal.extensionRequests[extensionIndex];
   
   // Update extension
-  const updatedExtension = {
+  const updatedExtension: ExtensionRequest = {
     ...extension,
     status: "APPROVED",
     recheckById: user.id,
@@ -760,7 +759,7 @@ export const rejectExtension = async (
   const extension = removal.extensionRequests[extensionIndex];
   
   // Update extension
-  const updatedExtension = {
+  const updatedExtension: ExtensionRequest = {
     ...extension,
     status: "REJECTED",
     recheckById: user.id,
